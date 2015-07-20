@@ -10,6 +10,7 @@
 #warning I hate warnings, but remind me to change this back to NO.
 #define DEVELOPMENT YES
 @implementation liborthros
+@synthesize apiAddress, UUID;
 
 #pragma mark orthros init
 
@@ -32,7 +33,7 @@
 #pragma mark orthos message functions
 
 // Read message for ID, response is encrypted.
-- (NSString *)read:(NSInteger *)msg_id {
+- (NSString *)readMessageWithID:(NSInteger *)msg_id {
     NSString *action = @"get";
     NSString *urlString = [NSString stringWithFormat:@"%@?action=%@&msg_id=%ld&UUID=%@", apiAddress, action, (long)msg_id, UUID];
     NSData *queryData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
@@ -48,7 +49,7 @@
 }
 
 // Get sender for message ID
-- (NSString *)sender:(NSInteger *)msg_id {
+- (NSString *)senderForMessageID:(NSInteger *)msg_id {
     NSString *action = @"get";
     NSString *urlString = [NSString stringWithFormat:@"%@?action=%@&msg_id=%ld&UUID=%@", apiAddress, action, (long)msg_id, UUID];
     NSData *queryData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
@@ -79,7 +80,7 @@
 }
 
 // Delete message for ID, returns YES for a sucessful deletion or NO for unsucessful
-- (BOOL)delete:(NSInteger *)msg_id withKey:(NSString *)key {
+- (BOOL)deleteMessageWithID:(NSInteger *)msg_id withKey:(NSString *)key {
     NSString *action = @"delete_msg";
     NSString *post = [NSString stringWithFormat:@"key=%@",key];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
@@ -107,7 +108,7 @@
 }
 
 // Send encrypted message to a user's ID
-- (BOOL)send:(NSString *)crypted_message toUser:(NSString *)to_id withKey:(NSString *)key {
+- (BOOL)sendMessage:(NSString *)crypted_message toUser:(NSString *)to_id withKey:(NSString *)key {
     NSDictionary* jsonDict = @{@"sender":UUID,@"msg":crypted_message};
     NSData* json = [NSJSONSerialization dataWithJSONObject:jsonDict options:0 error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
@@ -141,7 +142,7 @@
 #pragma mark nonce managment
 
 // Get onetime key
--(NSString *)genNonce {
+- (NSString *)genNonce {
     NSString *returnedKey = [[NSString alloc] init];
     NSString *action = @"gen_key";
     NSString *url = [NSString stringWithFormat:@"%@?action=%@&UUID=%@", apiAddress, action, UUID];
@@ -158,7 +159,7 @@
 #pragma mark General UUID queries
 
 // Check if UUID exists
--(BOOL)check {
+- (BOOL)checkForUUID {
     NSString *action = @"check";
     NSString *url = [NSString stringWithFormat:@"%@?action=%@&UUID=%@", apiAddress, action, UUID];
     NSData *queryData = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
@@ -177,7 +178,7 @@
 }
 
 // Submit the user's public key to the server
--(BOOL)upload:(NSString *)pub {
+- (BOOL)uploadPublicKey:(NSString *)pub {
     NSString *post = [NSString stringWithFormat:@"pub=%@",[self  base64String:pub]];
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:NO];
     NSString *action = @"upload";
@@ -237,7 +238,7 @@
 }
 
 // Obliterate a user
-- (BOOL)obliterate:(NSString *)uuid withKey:(NSString *)key {
+- (BOOL)obliterateUserForID:(NSString *)uuid withKey:(NSString *)key {
     NSString *post = [NSString stringWithFormat:@"key=%@", key];
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:NO];
     NSString *action = @"obliterate";
@@ -266,7 +267,7 @@
 }
 
 // Download public key for user's ID
--(NSString *)publicKeyFor:(NSString *)user_id {
+-(NSString *)publicKeyForUserID:(NSString *)user_id {
     NSString *action = @"download";
     NSString *url = [NSString stringWithFormat:@"%@?action=%@&UUID=%@&receiver=%@", apiAddress, action, UUID, user_id];
     NSData *queryData = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
