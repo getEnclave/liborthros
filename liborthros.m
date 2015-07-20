@@ -240,7 +240,7 @@
 }
 
 // Obliterate a user
-- (BOOL)obliterateUserForID:(NSString *)uuid withKey:(NSString *)key {
+- (BOOL)obliterateWithKey:(NSString *)key {
     NSString *post = [NSString stringWithFormat:@"key=%@", key];
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:NO];
     NSString *action = @"obliterate";
