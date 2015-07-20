@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CommonCrypto/CommonCrypto.h>
 
 /**
  * liborthros is a simple objc library used to communicate to an Orthros API server. Using this you can query all of the API functions implemented on the server-side.
@@ -16,9 +15,6 @@
  * This library will download public keys from Orthros, upload public keys, check for an existing public key for an Orthros ID, push encrypted messages to Orthros to be added to a user's queue, delete messages, and handle nonce generation requests.
  */
 @interface liborthros : NSObject
-
-@property (readonly) NSURL *apiAddress;
-@property (readonly) NSString *UUID;
 
 /// @name Initialization methods
 /**

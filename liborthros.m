@@ -9,8 +9,10 @@
 #import "liborthros.h"
 #warning I hate warnings, but remind me to change this back to NO.
 #define DEVELOPMENT YES
-@implementation liborthros
-@synthesize apiAddress, UUID;
+@implementation liborthros {
+    NSURL *apiAddress;
+    NSString *UUID;
+}
 
 #pragma mark orthros init
 
